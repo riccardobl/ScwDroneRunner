@@ -1,0 +1,13 @@
+#!/bin/bash
+export DRONE_URL="" 
+export DRONE_RPC_SECRET="" 
+export DRONE_TOKEN="" 
+export  SCW_ACCESS_KEY="" 
+export  SCW_SECRET_KEY="" 
+export  SCW_ORG="" 
+export  SCW_REGION="fr-par-1"
+
+# export DOCKER_SERVER="" # Run on the host machine, without docker
+# export DOCKER_SERVER="local" # Run on the local docker installation
+# export DOCKER_SERVER="Xyz" # Run on the specified docker server (configured in docker-machine)
+export DOCKER_SERVER=""

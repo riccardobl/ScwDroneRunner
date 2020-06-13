@@ -1,0 +1,25 @@
+{
+  "name": "scwdronerunner",
+  "version": "1.0.0",
+  "description": "This script spawns a drone runner instance on scaleway when needed and destroys it when all the builds are complete or after a fixed timeout.",
+  "main": "main.js",
+  "dependencies": {
+    "drone-node": "^2.0.0",
+    "node-fetch": "^2.6.0",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riccardobl/ScwDroneRunner.git"
+  },
+  "author": "Riccardo Balbo",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/riccardobl/ScwDroneRunner/issues"
+  },
+  "homepage": "https://github.com/riccardobl/ScwDroneRunner#readme"
+}
