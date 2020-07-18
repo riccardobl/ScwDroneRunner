@@ -21,7 +21,8 @@ function newSettings(){
         CONCURRENCY:1,
         INSTANCE_TYPE:"DEV1-M",
         BOOTSCRIPT:"15fbd2f7-a0f9-412b-8502-6a44da8d98b8",
-        IMAGE:"f974feac-abae-4365-b988-8ec7d1cec10d",
+        IMAGE:"Ubuntu 20.04 Focal Fossa",
+        IMAGE_ARCH:"x86_64",
         CLOUD_INIT:`#!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
 echo {INSTANCE_TYPE}
@@ -152,8 +153,8 @@ async function listServers(token,region,tags,statusCheck){
 async function pruneServers(){
     try{
         const settings=newSettings();
-        let servers= await listServers(settings.SCW_SECRET_KEY,"fr-par-1",[],(e)=>e=="stopped in place");
-        servers=servers.concat( await listServers(settings.SCW_SECRET_KEY,"nl-ams-1",[],(e)=>e=="stopped in place"));
+        let servers= await listServers(settings.SCW_SECRET_KEY,"fr-par-1",[],(e)=>e=="stopped in place"||e=="stopped");
+        servers=servers.concat( await listServers(settings.SCW_SECRET_KEY,"nl-ams-1",[],(e)=>e=="stopped in place"||e=="stopped"));
         for(let i in servers){
             const server=servers[i];
             console.log("Delete",server.id);
@@ -195,11 +196,21 @@ async function provisionServers(){
             console.log(serverTags);
             const matchingServers=await listServers(settings.SCW_SECRET_KEY,settings.SCW_REGION,serverTags,(e)=>e!="stopped in place");
             if(matchingServers.length==0){
+                console.log("Find image");
+                const images=(await scwAction(settings.SCW_SECRET_KEY,settings.SCW_REGION,
+                    "images"
+                    +"?name="+settings.IMAGE
+                    +"&arch="+settings.IMAGE_ARCH
+                    +"&public=true"
+                    ,"GET"
+                ));
+       
+                console.log("Use image",images.images[0].id)
                 console.log("Provision");
                 const resp=(await scwAction(settings.SCW_SECRET_KEY,settings.SCW_REGION,"servers/","POST",{
                     name:"runner-ci-"+uuidv4(),
                     dynamic_ip_required: true,
-                    image:settings.IMAGE,
+                    image:images.images[0].id,
                     bootscript: settings.BOOTSCRIPT,
                     boot_type:"bootscript",
                     tags:serverTags,
@@ -218,7 +229,6 @@ async function provisionServers(){
     }
 }
 
-
 setInterval(function(){
     provisionServers();    
 },PROVISION_INTERVAL);
@@ -226,3 +236,9 @@ setInterval(function(){
 setInterval(function(){
     pruneServers();
 },PRUNE_INTERVAL);
+
+
+process.once('SIGINT', function (code) {
+    console.log('SIGINT received...');
+    process.exit();
+});
