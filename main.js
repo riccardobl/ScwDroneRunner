@@ -45,7 +45,7 @@ docker run -d \
   --name runner \
   drone/drone-runner-docker:1
 shutdown -h {TIMEOUT_MINS} 
-( while [ true ]; do sleep 10m; if [ "$(docker ps -q | wc -l)" = "1" ]; then shutdown -h 0 ; fi;  done )&
+( while [ true ]; do sleep 30m; if [ "$(docker ps -q | wc -l)" = "1" ]; then shutdown -h 0 ; fi;  done )&
     `,
         COMPILED_CLOUD_INIT:"",
         COMPILED_TAGS:[],
