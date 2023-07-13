@@ -4,7 +4,7 @@
   "description": "This script spawns a drone runner instance on scaleway when needed and destroys it when all the builds are complete or after a fixed timeout.",
   "main": "main.js",
   "dependencies": {
-    "drone-node": "^2.0.0",
+    "drone-node": "^2.2.0",
     "node-fetch": "^2.6.1",
     "uuid": "^8.1.0"
   },
